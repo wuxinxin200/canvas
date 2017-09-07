@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="modernizr-1.6.min.js"></script>
+    <title>Title</title>
+</head>
+<body>
+<canvas id="drawing" width=" 500" height="500" style="border:1px solid red">A drawing of something.</canvas>
+<script type="text/javascript">
+    var theCanvas=document.getElementById("drawing");
+    var context= theCanvas.getContext("2d");
+
+    function darwSrceen(){
+        context.strokeStyle="#f00";
+        context.fillStyle="0f0";
+        context.lineWidth=10;
+        context.lineCap="round";
+        context.lineJoin="bevel";
+        context.beginPath();
+        context.moveTo(96,320);
+        context.bezierCurveTo(129,423,275,378,383,308);
+        context.stroke();
+        context.closePath();
+    }
+    darwSrceen()
+</script>
+</body>
+</html>

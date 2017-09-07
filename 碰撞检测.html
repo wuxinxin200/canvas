@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+    <script type="text/javascript" src="modernizr-1.6.min.js"></script>
+    <title>Title</title>
+</head>
+<body>
+<canvas id="drawing" width=" 500" height="500" style="border:1px solid red">A drawing of something.</canvas>
+<script type="text/javascript">
+    window.addEventListener("load", eventWindowloaded, false);
+    function eventWindowloaded() {
+        canvasApp();
+    }
+    function canvasSupport() {
+        return Modernizr.canvas;
+    }
+    function canvasApp() {
+        if (!canvasSupport()) {
+            return;
+        }
+        var theCanvas = document.getElementById("drawing");
+        var context = theCanvas.getContext("2d");
+
+        function ImgObiect(x,y,dx,width,height,src){
+            this.x=x;
+            this.y=y;
+            this.dx=dx;
+            this.width=width;
+            this.height=height;
+            this.image=new Image();
+            this.image.src=src;
+            this.imageData=function(){
+                return context.getImageData(0,0,this.width,this.height).data;
+            }
+        }
+        function darwpicB(){
+            context.drawImage(blueObject.image,0,0);
+        }
+        function darwpicR(){
+            context.drawImage(blueObject.image,0,0);
+        }
+
+        var blueObject=new ImgObiect(0,200,2,48,48,"images\/blueplus.png");
+        var redObject=new ImgObiect(0,200,-2,48,48,"images\/redcircle.png");
+        blueObject.image.addEventListener("load",darwpicB,false);
+        redObject.image.addEventListener("load",darwpicR,false);
+        var blueImageData=blueObject.imageData();
+        var redImageData=redObject.imageData();
+        console.log(redImageData.indexOf(160));
+    }
+</script>
+</body>
+</html>

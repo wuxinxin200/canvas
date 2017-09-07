@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="modernizr-1.6.min.js"></script>
+    <title>Title</title>
+</head>
+<body>
+<div style="float: left">
+    <canvas id="drawing" width=" 520" height="530" style="border:1px solid red">A drawing of something.</canvas>
+
+</div>
+<div style=" float: left;">
+
+    <form>
+        <span>文本：</span>
+        <input type="text" placeholder="请输入文本" id="textBox">
+        <br/>
+        <span>Fill Or Stroke</span>
+        <select id="fillOrStroke">
+            <option value="fill">fill</option>
+            <option value="stroke">stroke</option>
+            <option value="both">both</option>
+        </select><br/>
+        <span>字体大小</span>
+        <input type="range" max="200" min="10" step="1" id="textSize" value="50"><br/>
+        <span>字体样式</span>
+        <select id="setWeight">
+            <option value="normal">正常</option>
+            <option value="bold">加粗</option>
+            <option value="bolder">更粗</option>
+            <option value="lighter">边细</option>
+        </select><br/>
+        <span>字体</span>
+        <select id="setFamily">
+            <option value="宋体">宋体</option>
+            <option value="微软雅黑">微软雅黑</option>
+        </select><br/>
+        <span>fontface</span>
+        <select id="setFace">
+            <option value="normal">正常</option>
+            <option value="italic">斜体</option>
+            <option value="oblique">微斜体</option>
+        </select><br/>
+        <span>fillColor</span>
+        <input type="color" value="#ff0000" id="setFillcolor"><br>
+        <span>strokeColor</span>
+        <input type="color" value="#00ff00" id="setStorkecolor"><br>
+        <span>水平对齐</span>
+        <select id="textBaseline">
+            <option value="middle">middle</option>
+            <option value="start">start</option>
+            <option value="end">end</option>
+            <option value="left">left</option>
+            <option value="right">right</option>
+        </select><br>
+        <span>垂直对齐</span>
+        <select id="textAlign">
+            <option value="center">center</option>
+            <option value="top">top</option>
+            <option value="hanging">hanging</option>
+            <option value="alphabetic">alphabetic</option>
+            <option value="ideographic">ideographic</option>
+            <option value="bottom">bottom</option>
+        </select><br>
+        <span>透明度</span>
+        <input type="range" max="1.0" min="0" step="0.01" id="alpha">
+        <span>阴影颜色</span>
+        <input type="color" value="#00ff00" id="shadowcolors"><br>
+        <span>阴影X</span>
+        <input type="range" step="1" max="100" min="-100" id="shadowX">
+        <br/>
+        <span>阴影Y</span>
+        <input type="range" step="1" max="100" min="-100" id="shadowY">
+        <br/>
+        <span>阴影羽化</span>
+        <input type="range" step="1" max="100" min="0" id="shadowBlur">
+        <br/>
+        <span>画布宽度</span>
+        <input type="range" step="1" max="1000" value="500" min="0" id="canvasWidth">
+        <br/>
+        <span>画布高度</span>
+        <input type="range" step="1" max="1000" value="500" min="0" id="canvasHeight">
+        <br/>
+        <span>画布style宽度</span>
+        <input type="range" step="1" max="1000" value="500" min="0" id="canvasStyleWidth">
+        <br/>
+        <span>画布style高度</span>
+        <input type="range" step="1" max="1000" value="500" min="0" id="canvasStyleHeight">
+        <br>
+        <input type="button" value="创建图片" id="creatImgs">
+        <textarea id="imgDataDisplay" cols=30 rows=10></textarea>
+    </form>
+</div>
+
+<script type="text/javascript">
+    window.addEventListener("load", eventWindowloaded, false);
+    function eventWindowloaded() {
+        canvasApp();
+    }
+    function canvasSupport() {
+        return Modernizr.canvas;
+    }
+    function canvasApp() {
+        if (!canvasSupport()) {
+            return;
+        }
+        var message = "";
+        var fillOrStroke = "fill";
+        var fontsize = "50";
+        var fontWeight = "normal";
+        var fontFace = "normal";
+        var fontfamily = "宋体";
+        var fillColor = "#ff0000";
+        var strokeColor = "#00ff00";
+        var baseling = "middle";
+        var textAlign = "center";
+        var alpha = 1.0;
+        var shadowColor = "#000";
+        var shadowOffectX = 0;
+        var shadowOffectY = 0;
+        var shadowBlur = 0;
+        var theCanvas = document.getElementById("drawing");
+        var context = theCanvas.getContext("2d");
+        var fomeElement = document.getElementById("textBox");
+        fomeElement.addEventListener("keyup", textchange, false);
+
+        fomeElement = document.getElementById("fillOrStroke");
+        fomeElement.addEventListener("change", fillOrStrokeChange, false);
+
+        fomeElement = document.getElementById("textSize");
+        fomeElement.addEventListener("change", setFontsiz, false);
+
+        fomeElement = document.getElementById("setWeight");
+        fomeElement.addEventListener("change", setWeight, false);
+
+        fomeElement = document.getElementById("setFamily");
+        fomeElement.addEventListener("change", setFamily, false);
+
+        fomeElement = document.getElementById("setFace");
+        fomeElement.addEventListener("change", setFace, false);
+
+        fomeElement = document.getElementById("setFillcolor");
+        fomeElement.addEventListener("change", setFillcolor, false);
+
+        fomeElement = document.getElementById("setStorkecolor");
+        fomeElement.addEventListener("change", setStorkecolor, false);
+
+        fomeElement = document.getElementById("textBaseline");
+        fomeElement.addEventListener("change", textBaseline, false);
+
+        fomeElement = document.getElementById("textAlign");
+        fomeElement.addEventListener("change", textAligns, false);
+
+        fomeElement = document.getElementById("alpha");
+        fomeElement.addEventListener("change", changeAlpha, false);
+
+        fomeElement = document.getElementById("shadowcolors");
+        fomeElement.addEventListener("change", changeShadowColor, false);
+
+        fomeElement = document.getElementById("shadowX");
+        fomeElement.addEventListener("change", shadowX, false);
+
+        fomeElement = document.getElementById("shadowBlur");
+        fomeElement.addEventListener("change", changeShadowBlur, false);
+
+        fomeElement = document.getElementById("shadowY");
+        fomeElement.addEventListener("change", shadowY, false);
+
+        fomeElement = document.getElementById("canvasWidth");
+        fomeElement.addEventListener("change", canvasWidth, false);
+
+        fomeElement = document.getElementById("canvasHeight");
+        fomeElement.addEventListener("change", canvasHeight, false);
+
+        fomeElement = document.getElementById("canvasStyleWidth");
+        fomeElement.addEventListener("change", canvasStyleChange, false);
+
+        fomeElement = document.getElementById("canvasStyleHeight");
+        fomeElement.addEventListener("change", canvasStyleChange, false);
+
+        fomeElement = document.getElementById("creatImgs");
+        fomeElement.addEventListener("click", creatImg, false);
+
+        function canvasStyleChange(e) {
+            var styleWidth = document.getElementById("canvasStyleWidth");
+            var styleHeight = document.getElementById("canvasStyleHeight");
+            var stylevalue="widht:" + styleWidth.value +"px;height:"+ styleHeight.value+"px;border:1px solid red";
+            theCanvas.setAttribute("style",stylevalue);
+            drawScreen()
+        }
+
+        function textchange(e) {
+            var target = e.target;
+            message = target.value;
+            drawScreen()
+        }
+
+        function creatImg() {
+            var imgDataDisplaly=document.getElementById("imgDataDisplay");
+            var imgData =theCanvas.toDataURL("images/jpg");
+            var _fixType = function(type) {
+                type = type.toLowerCase().replace(/jpg/i, 'jpeg');
+                var r = type.match(/png|jpeg|bmp|gif/)[0];
+                return 'image/' + r;
+            };
+
+// 加工image data，替换mime type
+            imgData = imgData.replace(_fixType(imgData),'image/octet-stream');
+            imgDataDisplaly.value=theCanvas.toDataURL("images/jpg");
+
+            window.open(imgDataDisplaly.value,"canvasimg","top:0,left:0,width:"+ theCanvas.width+",height:"+theCanvas.height+",toolbar=0,resizable=0")
+        }
+
+        function canvasWidth(e) {
+            var target = e.target;
+            theCanvas.width = target.value;
+            drawScreen()
+        }
+
+        function canvasHeight(e) {
+            var target = e.target;
+            theCanvas.height = target.value;
+            drawScreen()
+        }
+
+        function fillOrStrokeChange(e) {
+            var target = e.target;
+            fillOrStroke = target.value;
+            drawScreen();
+        }
+
+        function setFontsiz(e) {
+            var target = e.target;
+            fontsize = target.value;
+            drawScreen();
+        }
+
+        function setWeight(e) {
+            var target = e.target;
+            fontWeight = target.value;
+            drawScreen();
+        }
+
+        function setFamily(e) {
+            var target = e.target;
+            fontfamily = target.value;
+            drawScreen();
+        }
+
+        function setFace(e) {
+            var target = e.target;
+            fontFace = target.value;
+            drawScreen();
+        }
+
+        function setFillcolor(e) {
+            var target = e.target;
+            fillColor = target.value;
+            drawScreen();
+        }
+
+        function setStorkecolor(e) {
+            var target = e.target;
+            strokeColor = target.value;
+            drawScreen();
+        }
+
+        function textBaseline(e) {
+            var target = e.target;
+            baseling = target.value;
+            drawScreen();
+        }
+
+        function textAligns(e) {
+            var target = e.target;
+            textAlign = target.value;
+            drawScreen();
+        }
+
+        function changeAlpha(e) {
+            var target = e.target;
+            alpha = target.value;
+            drawScreen();
+        }
+
+        function changeShadowColor(e) {
+            var target = e.target;
+            shadowColor = target.value;
+            drawScreen();
+        }
+
+        function shadowX(e) {
+            var target = e.target;
+            shadowOffectX = target.value;
+            drawScreen();
+        }
+
+        function shadowY(e) {
+            var target = e.target;
+            shadowOffectY = target.value;
+            drawScreen();
+        }
+
+        function changeShadowBlur(e) {
+            var target = e.target;
+            shadowBlur = target.value;
+            drawScreen();
+        }
+
+        function drawScreen() {
+            context.globalAlpha = 1.0;
+            context.fillStyle = "#FFF";
+            context.fillRect(0, 0, theCanvas.width, theCanvas.height);
+            context.font = fontFace + " " + fontWeight + " " + fontsize + "px" + " " + fontfamily;
+            context.textBaseline = baseling;
+            var metrics = context.measureText(message);
+            var textWidth = metrics.width;
+            var xPos = (theCanvas.width / 2) - (textWidth / 2);
+            var yPos = (theCanvas.height / 2);
+            context.globalAlpha = alpha;
+            context.shadowColor = shadowColor;
+            context.shadowOffsetX= shadowOffectX;
+            context.shadowOffsetY = shadowOffectY;
+            context.shadowBlur= shadowBlur;
+            switch (fillOrStroke) {
+                case "fill":
+                    context.fillStyle = fillColor;
+                    context.fillText(message, xPos, yPos);
+                    break;
+                case "stroke":
+                    context.strokeStyle = strokeColor;
+                    context.strokeText(message, xPos, yPos);
+                    break;
+                case "both":
+                    context.fillStyle = fillColor;
+                    context.fillText(message, xPos, yPos);
+                    context.strokeStyle = strokeColor;
+                    context.strokeText(message, xPos, yPos);
+                    break;
+            }
+
+        }
+    }
+</script>
+</body>
+</html>

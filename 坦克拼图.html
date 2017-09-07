@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="modernizr-1.6.min.js"></script>
+    <title>Title</title>
+</head>
+<body>
+<canvas id="drawing" width=" 256" height="256" style=" position: absolute; left:50px; top: 50px;">A drawing of something.</canvas>
+<script type="text/javascript">
+    window.addEventListener("load", eventWindowloaded, false);
+    function eventWindowloaded() {
+        canvasApp();
+    }
+    function canvasSupport() {
+        return Modernizr.canvas;
+    }
+
+    function canvasApp() {
+        if (!canvasSupport()) {
+            return;
+        }
+        var theCanvas = document.getElementById("drawing");
+        var context = theCanvas.getContext("2d");
+        var imagedata;
+        var mouseX,mouseY;
+        var imgs = new Image();
+        imgs.addEventListener("load",eventWindowloaded,false);
+        imgs.src = "images/tanks_sheet.png";
+
+        function onMouseMove(e){
+            mouseX= e.clientX-theCanvas.offsetLeft;
+            mouseY= e.clientY-theCanvas.offsetTop;
+        }
+        function onMouseClick(e){
+            if(mouseY<127){
+                var col=Math.floor(mouseX/32);
+                var row=Math.floor(mouseY/32);
+                var tiled=()
+            }
+        }
+        function drawScreen() {
+            context.globalAlpha = 1;
+            context.fillStyle = "#000";
+            context.drawImage(imgs,0,0);
+            imagedata=context.getImageData(0,0,10,10);
+            context.putImageData(imagedata,300,300);
+        }
+        drawScreen()
+    }
+</script>
+</body>
+</html>

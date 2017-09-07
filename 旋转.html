@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="modernizr-1.6.min.js"></script>
+    <title>Title</title>
+</head>
+<body>
+<canvas id="drawing" width=" 520" height="530" style="border:1px solid red">A drawing of something.</canvas>
+<script type="text/javascript">
+    window.addEventListener("load", eventWindowloaded, false);
+    function eventWindowloaded() {
+        canvasApp();
+    }
+    function canvasSupport() {
+        return Modernizr.canvas;
+    }
+    function canvasApp() {
+        if (!canvasSupport()) {
+            return;
+        }
+        var theCanvas = document.getElementById("drawing");
+        var context = theCanvas.getContext("2d");
+
+        function drawScreen() {
+            context.fillStyle="#008000";
+            context.fillRect(20,20,25,25);
+            context.setTransform(1,0,0,1,0,0);
+            var ang=Math.PI*15/180;
+            context.rotate(ang);
+            context.fillStyle="blue";
+            context.fillRect(100,100,50,50);
+            context.fillRect(0,0,2,2);
+            context.fillRect(100,0,2,2);
+            context.fillRect(200,0,2,2);
+            context.fillRect(300,0,2,2);
+            context.restore();
+            var ang2=Math.PI*45/180;
+            var x=100;
+            var y=100;
+            var w=50;
+            var h=50;
+            context.translate(x+w/2,y+h/2);
+            context.rotate(ang2);
+            context.fillRect(-0.5*w,-0.5*h,w,h);
+            context.setTransform(1,0,0,1,0,0);
+            context.fillStyle="red";
+            context.fillRect(100,100,50,50);
+            context.fillRect(0,0,2,2);
+            context.fillRect(100,0,2,2);
+            context.fillRect(200,0,2,2);
+            context.fillRect(300,0,2,2);
+
+        }
+
+        drawScreen();
+    }
+</script>
+</body>
+</html>

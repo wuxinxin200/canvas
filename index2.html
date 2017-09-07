@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="modernizr-1.6.min.js"></script>
+    <title>Title</title>
+</head>
+<body>
+<canvas id="drawing" width=" 500" height="500" style="border:1px solid red">A drawing of something.</canvas>
+<script type="text/javascript">
+    window.addEventListener("load", eventWindowloaded, false);
+    function eventWindowloaded() {
+        canvasApp();
+    }
+    function canvasSupport() {
+        return Modernizr.canvas;
+    }
+    function canvasApp() {
+        if (!canvasSupport()) {
+            return;
+        }
+        var theCanvas = document.getElementById("drawing");
+        var context = theCanvas.getContext("2d");
+
+        function drawScreen() {
+            context.globalAlpha = 1;
+            context.fillStyle = "#000";
+            context.fillRect(0,0,500,500);
+            context.globalAlpha = 0.25;
+            context.drawImage(imgs,0,0);
+            if(fadeIn){
+                alpha +=0.001;
+                if(alpha>=1){
+                    alpha=1;
+                    fadeIn= false;
+                }
+            }else{
+                alpha -=0.001;
+                if(alpha<0){
+                    alpha=0;
+                    fadeIn= true;
+                }
+            }
+            context.font ="72px Sans-Serif";
+            context.textBaseline= "top";
+            context.globalAlpha= alpha;
+            context.fillStyle="#fff";
+            context.fillText(text,50,200);
+        }
+        var text = "hello word";
+        var alpha = 0;
+        var fadeIn = true;
+        var imgs = new Image();
+        imgs.src = "images/img_03.jpg";
+        function gameLoop() {
+            window.setTimeout(function () {
+                gameLoop();
+            }, 20);
+            drawScreen();
+        }
+        gameLoop();
+    }
+</script>
+</body>
+</html>

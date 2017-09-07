@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        html,body{
+            width: 100%;
+            height: 100%;
+        }
+        canvas{
+            display: block;
+            box-sizing: border-box;
+            border: 1px solid red;
+        }
+    </style>
+    <script type="text/javascript" src="modernizr-1.6.min.js"></script>
+
+    <title>Title</title>
+</head>
+<body>
+<canvas id="drawing" height="1080" width="1920">A drawing of something.</canvas>
+<script>
+
+</script>
+<script src="hidpi-canvas.js"></script>
+<script type="text/javascript">
+
+    window.addEventListener("load", eventWindowloaded, false);
+    function eventWindowloaded() {
+        canvasApp();
+    }
+    function canvasSupport() {
+        return Modernizr.canvas;
+    }
+    function canvasApp() {
+        if (!canvasSupport()) {
+            return;
+        }
+        var theCanvas = document.getElementById("drawing");
+        var context = theCanvas.getContext("2d");
+
+
+        var img=new Image();
+        var cont=0;
+        img.src="images\/img003.jpg";
+        img.addEventListener('load',addImage,false);
+        function setArray(){
+            var arr=new Array();
+            for(var i=0;i<row;i++){
+                arr[i]=new Array();
+                for(var j=0;j<col;j++){
+                    var obj=new Object();
+                    obj.show=false;
+                    obj.width=theCanvas.width/col;
+                    obj.height=theCanvas.height/row;
+                    obj.x=obj.width*j;
+                    obj.y=obj.height*i;
+                    arr[i][j]=obj;
+                    obj=null;
+                }
+            }
+            return arr;
+        }
+        var row=20;
+        var col=20;
+        var count=0;
+        var arr=setArray();
+        function addImage(){
+            gameLoop();
+        }
+        function setShow(){
+            var c=count%col;//最后一个的x坐标
+            var r=Math.ceil(count/row);
+            for(var i=0; i<r;i++){
+                if(i<r-1){
+                    for(var j=0;j<col;j++){
+                        arr[i][j].show=true;
+                    }
+                }else if(i==r-1){
+                    for(var j=0;j<=c;j++){
+                        arr[i][j].show=true;
+                    }
+                }else{
+                    for(var j=0;j<=c;j++){
+                        arr[i][j].show=false;
+                    }
+                }
+            }
+        }
+        function drawImg(){
+            setShow();
+            for(var  m=0;m<row;m++){
+                for (var n=0;n<col;n++){
+                    if(arr[n][m].show==true){
+                        context.drawImage(img,arr[n][m].x,arr[n][m].y,arr[n][m].width,arr[n][m].height,arr[n][m].x,arr[n][m].y,arr[n][m].width,arr[n][m].height);
+                    }
+                }
+            }
+            if (count>=(row*col)){
+                count=0;
+            }else {
+                count++;
+            }
+        }
+
+        function drawScreen() {
+            context.fillStyle="#000000";
+            context.strokeStyle="#ccaa00";
+            context.fillRect(0,0,theCanvas.width,theCanvas.height);
+            drawImg();
+        }
+        function gameLoop(){
+            setTimeout(gameLoop,20);
+            drawScreen()
+        }
+    }
+
+
+
+
+
+</script>
+
+</body>
+</html>

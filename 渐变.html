@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="modernizr-1.6.min.js"></script>
+    <title>Title</title>
+</head>
+<body>
+<canvas id="drawing" width=" 520" height="530" style="border:1px solid red">A drawing of something.</canvas>
+<script type="text/javascript">
+    window.addEventListener("load", eventWindowloaded, false);
+    function eventWindowloaded() {
+        canvasApp();
+    }
+    function canvasSupport() {
+        return Modernizr.canvas;
+    }
+    function canvasApp() {
+        if (!canvasSupport()) {
+            return;
+        }
+        var theCanvas = document.getElementById("drawing");
+        var context = theCanvas.getContext("2d");
+
+        function drawScreen() {
+            var gr=context.createRadialGradient(50,50,25,100,100,100);
+            gr.addColorStop(0,"red");
+            gr.addColorStop(1,"yellow");
+            context.fillStyle= gr;
+            context.arc(100,100,100,0,(Math.PI/180)*360,false);
+            context.fill();
+        }
+
+        drawScreen();
+    }
+</script>
+</body>
+</html>
